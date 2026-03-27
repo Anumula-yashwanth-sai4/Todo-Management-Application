@@ -1,5 +1,7 @@
 package com.spring.backend.exceptions;
 
+
+
 public class ResponseMessage<T> {
 
     private String message;
