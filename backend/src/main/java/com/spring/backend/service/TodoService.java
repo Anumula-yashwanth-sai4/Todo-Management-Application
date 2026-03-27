@@ -1,6 +1,7 @@
 package com.spring.backend.service;
 
 import com.spring.backend.entity.Task;
+import com.spring.backend.exceptions.TaskNotFoundException;
 import com.spring.backend.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,14 @@ public class TodoService {
     }
 
     public void deleteTask(Integer id){
-        todoRepository.deleteById(id);
+
+        if (todoRepository.existsById(id)){
+            todoRepository.deleteById(id);
+        }
+        else{
+            throw new TaskNotFoundException("The task wasnot found in the db");
+        }
+
     }
 
     public List<Task> getAllTasks(){
@@ -35,27 +43,22 @@ public class TodoService {
 
     public Optional<Task> partialTaskUpdate(Integer id, Task updatingTask) {
 
-        Optional<Task> targetTask = todoRepository.findById(id);
+        Task existingTask = todoRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("The task was not in the db"));
 
-        if (targetTask.isPresent()) {
-            Task existingTask = targetTask.get();
-
-            if (updatingTask.getTitle() != null) {
-                existingTask.setTitle(updatingTask.getTitle());
-            }
-
-            if (updatingTask.getDescription() != null) {
-                existingTask.setDescription(updatingTask.getDescription());
-            }
-
-            if (updatingTask.getCompleted() != null) {
-                existingTask.setCompleted(updatingTask.getCompleted());
-            }
-
-            return Optional.of(todoRepository.save(existingTask));
+        if (updatingTask.getTitle() != null) {
+            existingTask.setTitle(updatingTask.getTitle());
         }
 
-        return Optional.empty();
+        if (updatingTask.getDescription() != null) {
+            existingTask.setDescription(updatingTask.getDescription());
+        }
+
+        if (updatingTask.getCompleted() != null) {
+            existingTask.setCompleted(updatingTask.getCompleted());
+        }
+
+        return Optional.of(todoRepository.save(existingTask));
     }
 
 
