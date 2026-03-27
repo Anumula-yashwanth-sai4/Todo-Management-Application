@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/todo")
-
+@CrossOrigin()
 public class TodoController {
 
     private TodoService todoService;

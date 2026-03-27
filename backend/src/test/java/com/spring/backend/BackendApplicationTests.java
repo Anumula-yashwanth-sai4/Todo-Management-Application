@@ -75,12 +75,12 @@ class BackendApplicationTests {
 		mvc.perform(post("/todo/add")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content("""
-								    {
-								      "title": "New Task",
-								      "description": "New Desc",
-								      "completed": false
-								    }
-								"""))
+                             {
+                               "title": "New Task",
+                               "description": "New Desc",
+                               "completed": false
+                             }
+                         """))
 				.andExpect(status().isOk());
 	}
 
@@ -102,22 +102,37 @@ class BackendApplicationTests {
 
 	}
 
-		@Test
-		void testEditTaskSuccess() throws Exception {
-			Task updated = new Task("Edited Title", "Edited Desc");
-			updated.setCompleted(false);
+	@Test
+	void testDeleteTaskSuccess() throws Exception {
+		// deleteTask returns void, so just doNothing()
+		doNothing().when(todoService).deleteTask(10);
 
-			when(todoService.partialTaskUpdate(eq(7), any(Task.class))).thenReturn(Optional.of(updated));
+		mvc.perform(delete("/todo/delete/10"))
+				.andExpect(status().isOk())
+				.andExpect(content().string("Task with 10 id is deleted"));
 
-			String requestJson = "{\"title\":\"Edited Title\",\"description\":\"Edited Desc\",\"completed\":false}";
+		verify(todoService, times(1)).deleteTask(10);
+	}
 
-			mvc.perform(patch("/todo/editTask/7")
-							.contentType(MediaType.APPLICATION_JSON)
-							.accept(MediaType.APPLICATION_JSON)
-							.content(requestJson))
-					.andExpect(status().isOk())
-					.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-		}
+
+	@Test
+	void testEditTaskSuccess() throws Exception {
+		Task updated = new Task("Edited Title", "Edited Desc");
+		updated.setCompleted(false);
+
+		when(todoService.partialTaskUpdate(eq(7), any(Task.class))).thenReturn(Optional.of(updated));
+
+		String requestJson = "{\"title\":\"Edited Title\",\"description\":\"Edited Desc\",\"completed\":false}";
+
+		mvc.perform(patch("/todo/editTask/7")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON)
+						.content(requestJson))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+	}
+
+
 
 
 
