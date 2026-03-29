@@ -6,5 +6,5 @@ ENV DB_HOST=localhost
 ENV DB_PORT=3307
 ENV DB_USER=root
 ENV DB_PASSWORD=root
-ENV DATABASE=training
+ENV DATABASE=todo_db
 CMD java -jar app.jar

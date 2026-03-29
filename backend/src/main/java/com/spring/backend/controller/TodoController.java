@@ -12,7 +12,6 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/todo")
-
 public class TodoController {
 
     private TodoService todoService;
