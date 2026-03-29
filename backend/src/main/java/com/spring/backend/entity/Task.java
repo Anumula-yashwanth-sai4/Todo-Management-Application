@@ -23,13 +23,27 @@ public class Task {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.completed == null) {
+            this.completed = false;
+        }
+        this.createdAt = LocalDateTime.now();
+    }
+
+
+
     public Task() {
     }
+
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
+        this.completed = false;
     }
+
 
     public Integer getId() {
         return id;
