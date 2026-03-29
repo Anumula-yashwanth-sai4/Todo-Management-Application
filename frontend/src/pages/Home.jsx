@@ -2,7 +2,7 @@ export function Home() {
   return (
     <div
       className="home-bg d-flex justify-content-center align-items-center"
-      style={{ backgroundColor: "#F3E8F7", minHeight: "100vh" }}>
+      style={{ backgroundColor: "#F3E8F7", minHeight: "93vh" }}>
     
       <div
         className="home-box text-center p-5"

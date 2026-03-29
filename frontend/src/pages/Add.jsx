@@ -4,7 +4,7 @@ export function Add(){
     <div
       style={{
         backgroundColor: "#F3E5F5", 
-        minHeight: "100vh",
+        minHeight: "93vh",
         paddingTop: "80px"
       }}
     ></div>

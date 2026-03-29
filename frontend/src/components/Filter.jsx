@@ -2,21 +2,27 @@ import axios from "axios";
 import { useState } from "react";
 
 export function Filter() {
-  const [tasks, setTasks] = useState([]);
-  const [status, setStatus] = useState("true");
+  const [tasks, setTasks]=useState([]);
+  const [status, setStatus]=useState("true");
+  const [error,setError]=useState("");
 
-  const handleSearch = () => {
-    axios
-      .get(`http://localhost:8081/todo/filtered/${status}`)
-      .then(res => setTasks(res.data))
-      .catch(err => console.log(err));
-  };
+  const handleSearch= ()=>{
+  setError("");     
+  setTasks([]);     
+
+  axios.get(`http://localhost:8081/todo/filtered/${status}`).then(res=> { setTasks(res.data); })
+    .catch(err => { console.log(err);
+    setError("Failed to show the status");
+    setTasks([]); 
+    });
+};
 
   return (
     <div
       className="d-flex justify-content-center align-items-start"
-      style={{ minHeight: "100vh", paddingTop: "80px", backgroundColor:"#F3E5F5" }}
+      style={{ minHeight: "93vh", paddingTop: "80px", backgroundColor:"#F3E5F5" }}
     >
+
       <div className="card shadow-lg w-50">
         <div className="card-header bg-primary text-white text-center">
           <h4>Filter Tasks</h4>
@@ -29,34 +35,32 @@ export function Filter() {
               value={status}
               onChange={e => setStatus(e.target.value)}
             >
-              <option value="true">✅ Completed</option>
-              <option value="false">⏳ Pending</option>
+              <option value="true">Completed</option>
+              <option value="false">Pending</option>
             </select>
 
             <button className="btn btn-success px-4" onClick={handleSearch}>
               Search
             </button>
           </div>
+          {error && (<div className="alert alert-danger text-center">
+            {error}
+            </div>)}
 
-          {tasks.length === 0 ? (
-            <p className="text-center text-muted">No tasks found</p>
-          ) : (
-            <ul className="list-group">
-              {tasks.map(task => (
-                <li
-                  key={task.id}
-                  className={`list-group-item d-flex justify-content-between align-items-center ${
-                    task.completed ? "list-group-item-success" : ""
-                  }`}
-                >
-                  <span>{task.title}</span>
-                  <small className="text-muted">
-                    {new Date(task.createdAt).toLocaleString()}
-                  </small>
-                </li>
-              ))}
-            </ul>
-          )}
+{!error && tasks.length > 0 && (
+  <ul className="list-group">
+    {tasks.map(task => (
+      <li
+        key={task.id}
+        className={`list-group-item d-flex justify-content-between align-items-center`} >
+        <span>{task.title}</span>
+        <small className="text-muted">
+          {new Date(task.createdAt).toLocaleString()}
+        </small>
+      </li>
+    ))}
+  </ul>
+)}         
         </div>
       </div>
     </div>

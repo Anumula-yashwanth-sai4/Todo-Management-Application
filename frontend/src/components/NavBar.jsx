@@ -3,10 +3,9 @@ import { NavLink } from "react-router-dom";
 
 export function NavBar() {
   return (
-   // <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
    <nav
   className="navbar navbar-expand-lg navbar-dark"
-  style={{ backgroundColor: "#d382ef" }}   // dark purple
+  style={{ backgroundColor: "#d382ef" }}  
 >
       <div className="container-fluid">
         <span className="navbar-brand">Taskarooo</span>
